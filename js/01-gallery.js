@@ -18,18 +18,20 @@ const makeGalleryMarkup = ({ preview, original, description }) => {
 const makeGallery = galleryItems.map(makeGalleryMarkup).join("");
 
 gallery.innerHTML += makeGallery;
-
 gallery.addEventListener("click", onGalleryItemClick);
 
 const link = document.querySelectorAll(".gallery__link");
-
 function addEventListenerOnLink() {
   link.forEach((element) =>
     element.addEventListener("click", (event) => event.preventDefault())
   );
 }
+
 addEventListenerOnLink();
 
 function onGalleryItemClick(event) {
-  console.log(event.target);
+  if (!event.target.classList.contains("gallery__image")) {
+    return;
+  }
+  console.log(event.target.dataset.source);
 }
