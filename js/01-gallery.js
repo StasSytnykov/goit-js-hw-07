@@ -29,7 +29,9 @@ function onAddEventListenerOnImg() {
 
 onAddEventListenerOnImg();
 
-let instance;
+let instance = basicLightbox.create(`
+    <img src="origin-img" width="800" height="600">
+`);
 
 function onGalleryOpenModal(event) {
   if (!event.target.classList.contains("gallery__image")) {
