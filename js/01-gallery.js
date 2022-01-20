@@ -18,26 +18,36 @@ const makeGalleryMarkup = ({ preview, original, description }) => {
 const makeGallery = galleryItems.map(makeGalleryMarkup).join("");
 
 gallery.innerHTML += makeGallery;
-gallery.addEventListener("click", onGalleryItemClick);
+gallery.addEventListener("click", onGalleryOpenModal);
 
-const link = document.querySelectorAll(".gallery__link");
-function addEventListenerOnLink() {
-  link.forEach((element) =>
+const originImg = document.querySelectorAll(".gallery__link");
+function onAddEventListenerOnImg() {
+  originImg.forEach((element) =>
     element.addEventListener("click", (event) => event.preventDefault())
   );
 }
 
-addEventListenerOnLink();
+onAddEventListenerOnImg();
 
-function onGalleryItemClick(event) {
+let instance;
+
+function onGalleryOpenModal(event) {
   if (!event.target.classList.contains("gallery__image")) {
     return;
   }
-  console.log(event.target.dataset.source);
+
+  instance = basicLightbox.create(`
+    <img src="${event.target.dataset.source}" width="800" height="600">
+`);
+
+  instance.show();
+
+  window.addEventListener("keydown", onEscCloseModal);
 }
 
-const instance = basicLightbox.create(`
-	<h1>Dynamic Content</h1>
-	<p>You can set the content of the lightbox with JS.</p>
-`);
-console.log(instance);
+function onEscCloseModal(event) {
+  if (event.code === "Escape") {
+    instance.close();
+    window.removeEventListener("keydown", onEscCloseModal);
+  }
+}
