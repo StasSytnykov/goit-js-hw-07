@@ -25,6 +25,7 @@ linkToOriginImg.forEach((element) =>
   element.addEventListener("click", (event) => event.preventDefault())
 );
 
+
 let instance;
 
 function onGalleryOpenModal(event) {
@@ -38,12 +39,12 @@ function onGalleryOpenModal(event) {
 
   instance.show();
 
-  window.addEventListener("keydown", toggleEventListener);
+  window.addEventListener("keydown", onCloseImgModal);
 }
 
-function toggleEventListener(event) {
+function onCloseImgModal(event) {
   if (event.code === "Escape") {
     instance.close();
-    window.removeEventListener("keydown", toggleEventListener);
+    window.removeEventListener("keydown", onCloseImgModal);
   }
 }
