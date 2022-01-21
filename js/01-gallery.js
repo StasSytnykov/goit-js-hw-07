@@ -20,18 +20,12 @@ const makeGallery = galleryItems.map(makeGalleryMarkup).join("");
 gallery.innerHTML += makeGallery;
 gallery.addEventListener("click", onGalleryOpenModal);
 
-const originImg = document.querySelectorAll(".gallery__link");
-function onAddEventListenerOnImg() {
-  originImg.forEach((element) =>
-    element.addEventListener("click", (event) => event.preventDefault())
-  );
-}
+const linkToOriginImg = document.querySelectorAll(".gallery__link");
+linkToOriginImg.forEach((element) =>
+  element.addEventListener("click", (event) => event.preventDefault())
+);
 
-onAddEventListenerOnImg();
-
-let instance = basicLightbox.create(`
-    <img src="origin-img" width="800" height="600">
-`);
+let instance;
 
 function onGalleryOpenModal(event) {
   if (!event.target.classList.contains("gallery__image")) {
@@ -44,12 +38,12 @@ function onGalleryOpenModal(event) {
 
   instance.show();
 
-  window.addEventListener("keydown", onEscCloseModal);
+  window.addEventListener("keydown", toggleEventListener);
 }
 
-function onEscCloseModal(event) {
+function toggleEventListener(event) {
   if (event.code === "Escape") {
     instance.close();
-    window.removeEventListener("keydown", onEscCloseModal);
+    window.removeEventListener("keydown", toggleEventListener);
   }
 }
