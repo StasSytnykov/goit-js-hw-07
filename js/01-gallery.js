@@ -1,9 +1,18 @@
 import { galleryItems } from "./gallery-items.js";
-// Change code below this line
-const gallery = document.querySelector(".gallery");
+// // Change code below this line
 
-const makeGalleryMarkup = ({ preview, original, description }) => {
-  return `<div class="gallery__item">
+const gallery = document.querySelector(".gallery");
+gallery.addEventListener("click", onGalleryOpenModal);
+
+let instance;
+
+class MakeGallery {
+  constructor(galleryItems) {
+    this.galleryItems = galleryItems;
+  }
+
+  onGalleryMarkup = ({ preview, original, description }) => {
+    return `<div class="gallery__item">
         <a class="gallery__link" href="${original}">
           <img
             class="gallery__image"
@@ -13,20 +22,25 @@ const makeGalleryMarkup = ({ preview, original, description }) => {
           />
         </a>
       </div>`;
-};
+  };
 
-const makeGallery = galleryItems.map(makeGalleryMarkup).join("");
+  onMakeGallerMarkup() {
+    const makeGallery = galleryItems.map(this.onGalleryMarkup).join("");
+    gallery.innerHTML += makeGallery;
+    this.onImgClickLisetner();
+  }
 
-gallery.innerHTML += makeGallery;
-gallery.addEventListener("click", onGalleryOpenModal);
+  onImgClickLisetner() {
+    const linkToOriginImg = document.querySelectorAll(".gallery__link");
+    linkToOriginImg.forEach((element) =>
+      element.addEventListener("click", (event) => event.preventDefault())
+    );
+  }
+}
 
-const linkToOriginImg = document.querySelectorAll(".gallery__link");
-linkToOriginImg.forEach((element) =>
-  element.addEventListener("click", (event) => event.preventDefault())
-);
+const completlyGalleryMarkup = new MakeGallery(galleryItems);
 
-
-let instance;
+completlyGalleryMarkup.onMakeGallerMarkup();
 
 function onGalleryOpenModal(event) {
   if (!event.target.classList.contains("gallery__image")) {
@@ -36,7 +50,6 @@ function onGalleryOpenModal(event) {
   instance = basicLightbox.create(`
     <img src="${event.target.dataset.source}" width="800" height="600">
 `);
-
   instance.show();
 
   window.addEventListener("keydown", onCloseImgModal);
